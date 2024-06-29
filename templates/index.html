@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Glioblastoma Detection</title>
+     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+     <style>
+          body {
+               font-family: Arial, sans-serif;
+               background-color: #f4f4f4;
+               display: flex;
+               flex-direction: column;
+               align-items: center;
+               margin: 0;
+               padding: 0;
+          }
+          .header {
+               text-align: center;
+               margin-bottom: 20px;
+               position: relative;
+               width: 100%;
+          }
+          .form-result-container {
+               display: flex;
+               justify-content: space-between;
+               align-items: flex-start;
+               width: 100%;
+               max-width: 800px;
+               padding: 20px;
+               margin-top: 180px;
+          }
+          form {
+               background: #fff;
+               padding: 20px;
+               border-radius: 8px;
+               box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+               width: 300px;
+               text-align: center;
+          }
+          .result-fieldset {
+               background: #fff;
+               padding: 20px;
+               border-radius: 8px;
+               box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+               width: 350px;
+               text-align: center;
+          }
+          fieldset {
+               border: none;
+               padding: 0;
+               margin: 0 0 20px;
+          }
+          label {
+               display: block;
+               margin-bottom: 10px;
+               font-size: 1.2em;
+               color: #333;
+          }
+          input[type="file"] {
+               display: none;
+          }
+          .custom-file-upload {
+               display: inline-block;
+               padding: 10px 20px;
+               cursor: pointer;
+               background: #007BFF;
+               color: #fff;
+               border-radius: 5px;
+               transition: background 0.3s ease;
+          }
+          .custom-file-upload:hover {
+               background: #0056b3;
+          }
+          input[type="submit"] {
+               display: inline-block;
+               padding: 10px 20px;
+               cursor: pointer;
+               background: #28a745;
+               color: #fff;
+               border: none;
+               border-radius: 5px;
+               transition: background 0.3s ease;
+          }
+          input[type="submit"]:hover {
+               background: #218838;
+          }
+          h1 {
+               font-size: 1.5em;
+               color: #333;
+               margin-bottom: 20px;
+          }
+          .image-preview {
+               display: block;
+               margin: 20px 0;
+               border: 1px solid #ddd;
+               padding: 10px;
+               border-radius: 8px;
+               max-width: 100%;
+               height: auto;
+          }
+          .vivo {
+               position: absolute;
+               top: 1px;
+               left: 1px;
+               width: 300px;
+               height: 110px;
+          }
+          .cloud {
+               position: absolute;
+               top: 30px;
+               right: 0.5px;
+               width: 300px;
+               height: 110px;
+          }
+          .text {
+               position: absolute;
+               top: 40px;
+               font-size: x-large;
+               left: 50%;
+               transform: translateX(-50%);
+               text-align: center;
+          }
+          .plot-container {
+               text-align: center;
+               margin-top: 20px;
+          }
+          .plot-container img {
+               width: 30%; /* Adjust the width to make the plot smaller */
+               height: 450px;
+               display: inline-block;
+               margin: 0 10px; /* Add some spacing between the images */
+          }
+          table {
+               width: 100%;
+               border-collapse: collapse;
+               margin-top: 20px;
+          }
+          th, td {
+               padding: 10px;
+               text-align: left;
+               border-bottom: 1px solid #ddd;
+          }
+          th {
+               background-color: #f2f2f2;
+          }
+          .feature-table {
+               margin-top: 20px;
+          }
+     </style>
+</head>
+<body>
+     <div class="header">
+          <div class="vivo">
+               <img src="{{ url_for('static', filename='WhatsApp Image 2024-06-19 at 6.22.02 PM.jpeg') }}" alt="Vivi Ai logo" class="vivo">
+          </div>
+          <div class="text">
+               <h1 style="color: #184632;">Glioblastoma Detection</h1>
+          </div>
+          <div class="cloud">
+               <img src="{{ url_for('static', filename='FAFBF12CEB54491AA27F996EC5D1DF6F.jpg') }}" alt="cloud nebulla image">
+          </div>
+     </div>
+     <div class="form-result-container">
+          <div>
+               <form action="/predict" method="POST" enctype="multipart/form-data">
+                    <fieldset>
+                         <label for="file">Upload the Image</label>
+                         <label class="custom-file-upload">
+                              <input type="file" name="file" id="file" required>
+                              Choose File
+                         </label>
+                         <input type="submit" value="Submit">
+                    </fieldset>
+               </form>
+               {% if fd is not none and entropy is not none and lacunarity is not none %}
+               <div class="feature-table">
+                    <table>
+                         <thead>
+                              <tr>
+                                   <th>Feature</th>
+                                   <th>Value</th>
+                              </tr>
+                         </thead>
+                         <tbody>
+                              <tr>
+                                   <td>Fractal Dimension</td>
+                                   <td>{{ fractal_dimension }}</td>
+                              </tr>
+                              <tr>
+                                   <td>Entropy</td>
+                                   <td>{{ entropy }}</td>
+                              </tr>
+                              <tr>
+                                   <td>Lacunarity</td>
+                                   <td>{{ lacunarity }}</td>
+                              </tr>
+                              <tr>
+                                   <td>Gray Level Co-Occurrence Matrix</td>
+                                   <td> ------</td>
+                              </tr>
+                              <tr>
+                                   <td>Gray Level Run Length Matrix</td>
+                                   <td> ------</td>
+                              </tr>
+                         </tbody>
+                    </table>
+               </div>
+               {% endif %}
+          </div>
+          <fieldset class="result-fieldset">
+               <h1>Result is {{ result }}</h1>
+               {% if file_path %}
+               <img src="{{ url_for('static', filename='uploads/' + file_path.split('/')[-1]) }}" alt="GBM Image" class="image-preview">
+               {% endif %}
+               <a href="{{ url_for('download_report', result=result, fractal_dimension=fractal_dimension, entropy=entropy, lacunarity=lacunarity, file_path=file_path) }}" class="custom-file-upload" style="background: #ffc107; text-decoration: none;">Download Report</a>
+          </fieldset>
+     </div>
+     <div class="plot-container">
+          <img src="{{ url_for('static', filename='output.png') }}" alt="Plot Image">
+          <img src="{{ url_for('static', filename='output1.png') }}" alt="Plot Image">
+          <img src="{{ url_for('static', filename='output2.png') }}" alt="Plot Image">
+     </div>
+</body>
+</html>

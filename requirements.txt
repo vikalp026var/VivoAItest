@@ -1,0 +1,12 @@
+tqdm
+ipykernel
+matplotlib
+scikit-learn
+opencv-python
+xgboost
+torch
+pandas
+mlflow
+flask
+reportlab
+gunicorn==20.1.0
